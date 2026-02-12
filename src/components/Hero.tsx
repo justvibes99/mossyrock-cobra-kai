@@ -29,8 +29,8 @@ export default function Hero() {
       >
         {/* Red glow behind logo */}
         <div
-          className="absolute inset-[-40px] rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(196, 30, 30, 0.6) 0%, rgba(196, 30, 30, 0.2) 35%, transparent 65%)" }}
+          className="absolute inset-[-80px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(196, 30, 30, 0.7) 0%, rgba(196, 30, 30, 0.3) 40%, transparent 70%)" }}
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
