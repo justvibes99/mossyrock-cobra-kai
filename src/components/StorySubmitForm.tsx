@@ -160,8 +160,8 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, pas
             <button
               type="submit"
               disabled={loggingIn}
-              className="brutal-btn flex-1 flex items-center justify-center gap-2 bg-cobra-red text-white font-bold uppercase tracking-wider py-3 border-3 border-black text-sm disabled:opacity-70"
-              style={{ boxShadow: "4px 4px 0px #FFE66D" }}
+              className="flex-1 flex items-center justify-center gap-2 bg-cobra-red text-white font-bold uppercase tracking-wider py-3 border-3 border-black text-sm disabled:opacity-70 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+              style={{ boxShadow: loggingIn ? "none" : "4px 4px 0px #FFE66D" }}
             >
               {loggingIn ? (
                 <>
