@@ -23,16 +23,20 @@ export default function Hero() {
       {/* Dark vignette edges */}
       <div className="absolute inset-0 bg-radial-[ellipse_at_center] from-transparent to-black/60" />
 
-      {/* Logo — clipped to circle to hide white bg */}
+      {/* Logo with glow */}
       <div
         className={`relative z-10 mb-6 transition-all duration-1000 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
       >
+        {/* Red glow behind logo */}
+        <div
+          className="absolute inset-[-40px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(196, 30, 30, 0.6) 0%, rgba(196, 30, 30, 0.2) 35%, transparent 65%)" }}
+        />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/cobra-logo.png"
           alt="Mossyrock Cobra Kai Logo"
-          className="w-[26rem] md:w-[40rem] h-auto"
-          style={{ filter: "drop-shadow(0 0 60px rgba(196, 30, 30, 0.7))" }}
+          className="relative w-[26rem] md:w-[40rem] h-auto"
         />
       </div>
 
