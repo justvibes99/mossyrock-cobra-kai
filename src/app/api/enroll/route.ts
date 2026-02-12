@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { getSQL } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { dojoNames } from "@/lib/dojo-names";
 
@@ -15,6 +15,7 @@ export async function POST(request: Request) {
 
     const dojoName = dojoNames[Math.floor(Math.random() * dojoNames.length)];
 
+    const sql = getSQL();
     await sql`
       INSERT INTO roster (name, dojo_name, path)
       VALUES (${name.trim()}, ${dojoName}, ${chosenPath})

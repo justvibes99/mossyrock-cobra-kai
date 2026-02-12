@@ -1,9 +1,10 @@
-import { sql } from "@vercel/postgres";
+import { getSQL } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const { rows } = await sql`
+    const sql = getSQL();
+    const rows = await sql`
       SELECT name, dojo_name, path, enrolled_at
       FROM roster
       ORDER BY enrolled_at DESC

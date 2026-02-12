@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { getSQL } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "crypto";
 
@@ -17,7 +17,8 @@ function checkPassword(input: string): boolean {
 
 export async function GET() {
   try {
-    const { rows } = await sql`
+    const sql = getSQL();
+    const rows = await sql`
       SELECT id, title, excerpt, genre, status, created_at
       FROM stories
       ORDER BY created_at DESC
@@ -58,7 +59,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { rows } = await sql`
+    const sql = getSQL();
+    const rows = await sql`
       INSERT INTO stories (title, excerpt, genre)
       VALUES (${title.trim()}, ${excerpt.trim()}, ${genre.trim()})
       RETURNING id, title, excerpt, genre, status, created_at
