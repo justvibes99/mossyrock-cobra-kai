@@ -1,0 +1,17 @@
+export const dojoNames = [
+  "The Silent Viper",
+  "Mossy Fist",
+  "Thunder Cobra",
+  "The Riffe Lake Ripper",
+  "Cascade Fury",
+  "The Dam Breaker",
+  "Pacific Nightmare",
+  "Shadow Serpent",
+  "The Cowlitz Crusher",
+  "Iron Moss",
+  "The Douglas Fir Devastator",
+  "Rain Walker",
+  "The Lewis County Legend",
+  "Stone Fang",
+  "The Mossyrock Mauler",
+];
