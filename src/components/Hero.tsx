@@ -34,7 +34,7 @@ export default function Hero() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/cobra-logo-new.png"
+          src="/cobra-logo-v2.png"
           alt="Mossyrock Cobra Kai Logo"
           className="relative w-[26rem] md:w-[40rem] h-auto"
         />
