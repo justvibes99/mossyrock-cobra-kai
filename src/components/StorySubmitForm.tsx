@@ -13,6 +13,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, pas
   const [showLogin, setShowLogin] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -27,6 +28,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, pas
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
+    setLoggingIn(true);
 
     try {
       const res = await fetch("/api/grammar-check", {
@@ -44,6 +46,8 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, pas
       setShowLogin(false);
     } catch {
       setLoginError("Something went wrong. Try again.");
+    } finally {
+      setLoggingIn(false);
     }
   };
 
@@ -155,10 +159,20 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, pas
           <div className="flex gap-3">
             <button
               type="submit"
-              className="flex-1 bg-cobra-red text-white font-bold uppercase tracking-wider py-3 border-3 border-black text-sm"
-              style={{ boxShadow: "3px 3px 0px #FFE66D" }}
+              disabled={loggingIn}
+              className="brutal-btn flex-1 flex items-center justify-center gap-2 bg-cobra-red text-white font-bold uppercase tracking-wider py-3 border-3 border-black text-sm disabled:opacity-70"
+              style={{ boxShadow: "4px 4px 0px #FFE66D" }}
             >
-              Enter
+              {loggingIn ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="30 70" strokeLinecap="round" />
+                  </svg>
+                  Verifying...
+                </>
+              ) : (
+                "Enter"
+              )}
             </button>
             <button
               type="button"
