@@ -32,12 +32,14 @@ export default function Hero() {
           className="absolute inset-[-40px] rounded-full pointer-events-none"
           style={{ background: "radial-gradient(circle, rgba(196, 30, 30, 0.6) 0%, rgba(196, 30, 30, 0.2) 35%, transparent 65%)" }}
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/cobra-logo-new.png"
-          alt="Mossyrock Cobra Kai Logo"
-          className="relative w-[26rem] md:w-[40rem] h-auto rounded-full"
-        />
+        <div className="relative w-[22rem] md:w-[34rem] aspect-square rounded-full overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/cobra-logo-new.png"
+            alt="Mossyrock Cobra Kai Logo"
+            className="w-full h-full object-cover scale-110"
+          />
+        </div>
       </div>
 
       {/* Tagline */}
