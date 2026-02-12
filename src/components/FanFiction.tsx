@@ -139,7 +139,7 @@ export default function FanFiction() {
 
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
-                    expanded === i ? "max-h-[800px]" : "max-h-0"
+                    expanded === i ? "max-h-[800px] overflow-y-auto" : "max-h-0"
                   }`}
                 >
                   <div className="px-6 pb-6 border-t-2 border-cobra-yellow/20 pt-4">
