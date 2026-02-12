@@ -16,18 +16,17 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [screenplay, setScreenplay] = useState<string | null>(null);
+  const [polished, setPolished] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [polishing, setPolishing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
-  const [checking, setChecking] = useState(false);
-  const [feedback, setFeedback] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
 
-    // Validate password by making a test request
     try {
       const res = await fetch("/api/grammar-check", {
         method: "POST",
@@ -47,14 +46,13 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
     }
   };
 
-  const handleGrammarCheck = async () => {
+  const handlePolish = async () => {
     if (!body.trim()) {
       setError("Write something first, recruit.");
       return;
     }
-    setChecking(true);
+    setPolishing(true);
     setError("");
-    setFeedback("");
 
     try {
       const res = await fetch("/api/grammar-check", {
@@ -65,15 +63,19 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Grammar check failed");
+        setError(data.error || "Polish failed");
         return;
       }
 
-      setFeedback(data.feedback);
+      if (data.story) {
+        setBody(data.story);
+        setScreenplay(data.screenplay || null);
+        setPolished(true);
+      }
     } catch {
-      setError("Grammar check failed. Try again.");
+      setError("Polish failed. Try again.");
     } finally {
-      setChecking(false);
+      setPolishing(false);
     }
   };
 
@@ -86,7 +88,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
       const res = await fetch("/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, excerpt: body, genre: "Fan Fiction", password }),
+        body: JSON.stringify({ title, excerpt: body, genre: "Fan Fiction", screenplay, password }),
       });
       const data = await res.json();
 
@@ -98,7 +100,8 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
       setSuccess(true);
       setTitle("");
       setBody("");
-      setFeedback("");
+      setScreenplay(null);
+      setPolished(false);
       setOpen(false);
       onStoryCreated();
 
@@ -110,7 +113,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
     }
   };
 
-  // Not logged in — show nothing or a login prompt
+  // Not logged in
   if (!loggedIn) {
     if (!showLogin) {
       return (
@@ -169,7 +172,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
     );
   }
 
-  // Logged in but form not open — show + New Story button
+  // Logged in, form closed
   if (!open) {
     return (
       <div className="mt-8 flex justify-center items-center gap-4">
@@ -203,7 +206,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
           </h3>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={() => { setOpen(false); setPolished(false); setScreenplay(null); }}
             className="text-cobra-gold font-mono text-sm uppercase hover:text-cobra-yellow"
           >
             Close
@@ -230,13 +233,13 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
         {/* Body */}
         <div className="mb-6">
           <label className="block font-mono text-cobra-gold uppercase tracking-wider text-sm mb-2">
-            Body
+            {polished ? "Polished Story" : "Draft"}
           </label>
           <textarea
             value={body}
-            onChange={(e) => setBody(e.target.value)}
-            placeholder="The rain hammered against the dojo walls..."
-            rows={6}
+            onChange={(e) => { setBody(e.target.value); setPolished(false); setScreenplay(null); }}
+            placeholder="Write your rough draft... the cobra will polish it."
+            rows={8}
             maxLength={10000}
             className="w-full bg-cobra-black text-foreground border-3 border-cobra-red p-4 font-mono text-sm focus:border-cobra-yellow focus:outline-none resize-none placeholder:text-foreground/30"
             style={{ boxShadow: "inset 2px 2px 0px rgba(0,0,0,0.3)" }}
@@ -246,31 +249,23 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
             <span className="font-mono text-cobra-gold/50 text-xs">
               {body.length}/10,000
             </span>
-            <button
-              type="button"
-              onClick={handleGrammarCheck}
-              disabled={checking || !body.trim()}
-              className="font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-gold text-cobra-gold hover:bg-cobra-gold hover:text-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              {checking ? "Checking..." : "Grammar + Screenplay"}
-            </button>
+            {!polished && (
+              <button
+                type="button"
+                onClick={handlePolish}
+                disabled={polishing || !body.trim()}
+                className="font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-gold text-cobra-gold hover:bg-cobra-gold hover:text-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                {polishing ? "Polishing..." : "Polish & Write Screenplay"}
+              </button>
+            )}
+            {polished && (
+              <span className="font-mono text-green-400 text-xs uppercase tracking-wider">
+                Polished & screenplay ready
+              </span>
+            )}
           </div>
         </div>
-
-        {/* Grammar feedback */}
-        {feedback && (
-          <div
-            className="mb-6 bg-cobra-black border-3 border-cobra-gold p-4"
-            style={{ boxShadow: "4px 4px 0px #000" }}
-          >
-            <p className="font-mono text-cobra-gold uppercase tracking-wider text-xs mb-2">
-              Grammar &amp; Screenplay
-            </p>
-            <p className="text-foreground font-mono text-sm whitespace-pre-wrap leading-relaxed">
-              {feedback}
-            </p>
-          </div>
-        )}
 
         {/* Error */}
         {error && (

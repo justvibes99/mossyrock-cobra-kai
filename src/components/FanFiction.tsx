@@ -8,6 +8,7 @@ interface Story {
   title: string;
   excerpt: string;
   status: string;
+  screenplay: string | null;
   created_at: string;
 }
 
@@ -15,6 +16,7 @@ export default function FanFiction() {
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [showScreenplay, setShowScreenplay] = useState<number | null>(null);
   const [stories, setStories] = useState<Story[]>([]);
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -79,14 +81,16 @@ export default function FanFiction() {
             {stories.map((story, i) => (
               <div
                 key={story.id}
-                className={`brutal-card bg-cobra-dark border-3 border-cobra-yellow cursor-pointer transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                className={`brutal-card bg-cobra-dark border-3 border-cobra-yellow transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                 style={{
                   boxShadow: expanded === i ? "8px 8px 0px #c41e1e" : "6px 6px 0px #000",
                   animationDelay: `${i * 0.15}s`,
                 }}
-                onClick={() => setExpanded(expanded === i ? null : i)}
               >
-                <div className="p-6 flex items-start justify-between gap-4">
+                <div
+                  className="p-6 flex items-start justify-between gap-4 cursor-pointer"
+                  onClick={() => { setExpanded(expanded === i ? null : i); setShowScreenplay(null); }}
+                >
                   <div className="flex-1">
                     <span
                       className={`font-mono text-xs uppercase tracking-wider px-2 py-1 border-2 border-black mb-2 inline-block ${
@@ -112,13 +116,37 @@ export default function FanFiction() {
 
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
-                    expanded === i ? "max-h-96" : "max-h-0"
+                    expanded === i ? "max-h-[800px]" : "max-h-0"
                   }`}
                 >
                   <div className="px-6 pb-6 border-t-2 border-cobra-yellow/20 pt-4">
-                    <p className="text-foreground leading-relaxed font-mono text-sm">
-                      {story.excerpt}
-                    </p>
+                    {showScreenplay === i && story.screenplay ? (
+                      <>
+                        <pre className="text-foreground leading-relaxed font-mono text-sm whitespace-pre-wrap">
+                          {story.screenplay}
+                        </pre>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShowScreenplay(null); }}
+                          className="mt-4 font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-gold text-cobra-gold hover:bg-cobra-gold hover:text-black transition-colors"
+                        >
+                          Back to Story
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-foreground leading-relaxed font-mono text-sm">
+                          {story.excerpt}
+                        </p>
+                        {story.screenplay && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setShowScreenplay(i); }}
+                            className="mt-4 font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-red text-cobra-red hover:bg-cobra-red hover:text-white transition-colors"
+                          >
+                            View Screenplay
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

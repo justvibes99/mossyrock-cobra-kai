@@ -19,7 +19,7 @@ export async function GET() {
   try {
     const sql = getSQL();
     const rows = await sql`
-      SELECT id, title, excerpt, genre, status, created_at
+      SELECT id, title, excerpt, genre, status, screenplay, created_at
       FROM stories
       ORDER BY created_at DESC
     `;
@@ -36,7 +36,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { title, excerpt, genre, password } = await request.json();
+    const { title, excerpt, genre, screenplay, password } = await request.json();
 
     if (!password || !checkPassword(password)) {
       return NextResponse.json(
@@ -61,9 +61,9 @@ export async function POST(request: Request) {
 
     const sql = getSQL();
     const rows = await sql`
-      INSERT INTO stories (title, excerpt, genre)
-      VALUES (${title.trim()}, ${excerpt.trim()}, ${genre.trim()})
-      RETURNING id, title, excerpt, genre, status, created_at
+      INSERT INTO stories (title, excerpt, genre, screenplay)
+      VALUES (${title.trim()}, ${excerpt.trim()}, ${genre.trim()}, ${screenplay || null})
+      RETURNING id, title, excerpt, genre, status, screenplay, created_at
     `;
 
     return NextResponse.json(rows[0], { status: 201 });
