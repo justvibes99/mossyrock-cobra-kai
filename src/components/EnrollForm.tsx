@@ -16,7 +16,6 @@ export default function EnrollForm() {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [reason, setReason] = useState("");
-  const [path, setPath] = useState("Warrior");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState(0);
@@ -55,7 +54,7 @@ export default function EnrollForm() {
       const res = await fetch("/api/enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), path }),
+        body: JSON.stringify({ name: name.trim() }),
       });
       const data = await res.json();
 
@@ -115,11 +114,10 @@ export default function EnrollForm() {
               </div>
 
               <h3 className="text-3xl font-bold text-cobra-yellow uppercase mb-4">
-                You&apos;re In.
+                Application Received.
               </h3>
               <p className="text-foreground text-lg mb-6">
-                Welcome to the Mossyrock Cobra Kai,{" "}
-                <span className="text-cobra-yellow font-bold">{name}</span>.
+                <span className="text-cobra-yellow font-bold">{name}</span>, your application has been submitted to the Mossyrock Cobra Kai.
               </p>
 
               <div
@@ -130,10 +128,10 @@ export default function EnrollForm() {
               </div>
 
               <p className="text-foreground text-sm mb-2">
-                Report to the dam at sunrise. Bring nothing but your courage.
+                Sensei Russ will review your enrollment. Once approved, you&apos;ll appear on the roster.
               </p>
               <p className="font-mono text-cobra-red text-xs uppercase tracking-wider mt-4">
-                Sensei Russ will be watching.
+                The cobra is patient. Await your summons.
               </p>
 
               <button
@@ -141,7 +139,6 @@ export default function EnrollForm() {
                   setSubmitted(false);
                   setName("");
                   setReason("");
-                  setPath("Warrior");
                 }}
                 className="brutal-btn mt-8 bg-cobra-dark text-cobra-yellow font-bold uppercase tracking-wider px-6 py-3 border-3 border-cobra-yellow"
                 style={{ boxShadow: "4px 4px 0px #000" }}
@@ -206,29 +203,6 @@ export default function EnrollForm() {
                   className="w-full bg-cobra-dark text-foreground border-3 border-cobra-red p-4 focus:border-cobra-yellow focus:outline-none resize-none placeholder:text-foreground/30"
                   style={{ boxShadow: "inset 2px 2px 0px rgba(0,0,0,0.3)" }}
                 />
-              </div>
-
-              <div className="mb-8">
-                <label className="block font-mono text-cobra-gold uppercase tracking-wider text-sm mb-3">
-                  Select your path
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {["Warrior", "Scholar", "Shadow", "Berserker"].map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPath(p)}
-                      className={`brutal-btn flex items-center gap-2 font-bold p-3 border-3 cursor-pointer transition-colors text-center justify-center uppercase text-sm ${
-                        path === p
-                          ? "bg-cobra-red text-white border-cobra-red"
-                          : "bg-cobra-dark text-foreground border-cobra-red hover:bg-cobra-red hover:text-white"
-                      }`}
-                      style={{ boxShadow: path === p ? "none" : "3px 3px 0px #000", transform: path === p ? "translate(3px, 3px)" : "none" }}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               <button
