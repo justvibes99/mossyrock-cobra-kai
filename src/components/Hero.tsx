@@ -36,7 +36,7 @@ export default function Hero() {
         <img
           src="/cobra-logo-v2.png"
           alt="Mossyrock Cobra Kai Logo"
-          className="relative w-[45rem] md:w-[75rem] h-auto"
+          className="relative w-[22rem] md:w-[36rem] h-auto"
         />
       </div>
 
