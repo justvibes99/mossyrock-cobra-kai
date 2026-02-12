@@ -11,7 +11,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-cobra-black px-4">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-x-hidden bg-cobra-black px-4">
       {/* Subtle background pattern only */}
       <div
         className="absolute inset-0 opacity-[0.03]"
