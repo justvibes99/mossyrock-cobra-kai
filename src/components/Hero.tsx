@@ -25,7 +25,7 @@ export default function Hero() {
 
       {/* Logo — clipped to circle to hide white bg */}
       <div
-        className={`mb-6 transition-all duration-1000 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+        className={`relative z-10 mb-6 transition-all duration-1000 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -37,7 +37,7 @@ export default function Hero() {
       </div>
 
       {/* Tagline */}
-      <div className={`mt-4 transition-all duration-1000 delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+      <div className={`relative z-10 mt-4 transition-all duration-1000 delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
         <p className="text-lg md:text-2xl font-mono tracking-widest uppercase text-center text-foreground">
           Strike First. Strike Hard.{" "}
           <span className="text-cobra-red font-bold">No Mercy.</span>
@@ -48,7 +48,7 @@ export default function Hero() {
       </div>
 
       {/* CTA */}
-      <div className={`mt-12 transition-all duration-1000 delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+      <div className={`relative z-10 mt-12 transition-all duration-1000 delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
         <a
           href="#enroll"
           className="brutal-btn inline-block bg-cobra-yellow text-black font-bold text-lg uppercase tracking-wider px-8 py-4 border-3 border-black"

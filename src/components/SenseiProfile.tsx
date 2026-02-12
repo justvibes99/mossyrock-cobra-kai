@@ -71,7 +71,7 @@ export default function SenseiProfile() {
                 Grandmaster & Founder
               </p>
               <p className="font-mono text-cobra-red text-xs uppercase tracking-wider mt-1">
-                &ldquo;The Mossyrock Menace&rdquo;
+                &ldquo;The Cobra Master&rdquo;
               </p>
 
               <div className="mt-6 border-t-2 border-cobra-yellow pt-4">
