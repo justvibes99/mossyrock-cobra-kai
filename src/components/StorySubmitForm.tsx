@@ -4,13 +4,14 @@ import { useState } from "react";
 
 interface StorySubmitFormProps {
   loggedIn: boolean;
-  onLogin: () => void;
+  onLogin: (password: string) => void;
   onStoryCreated: () => void;
+  password: string;
 }
 
-export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: StorySubmitFormProps) {
+export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated, password }: StorySubmitFormProps) {
   const [showLogin, setShowLogin] = useState(false);
-  const [password, setPassword] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
 
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
       const res = await fetch("/api/grammar-check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: "test", password }),
+        body: JSON.stringify({ text: "test", password: loginPassword }),
       });
 
       if (res.status === 401) {
@@ -39,7 +40,7 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
         return;
       }
 
-      onLogin();
+      onLogin(loginPassword);
       setShowLogin(false);
     } catch {
       setLoginError("Something went wrong. Try again.");
@@ -140,8 +141,8 @@ export default function StorySubmitForm({ loggedIn, onLogin, onStoryCreated }: S
           </label>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
             placeholder="Only Sensei Russ knows..."
             className="w-full bg-cobra-black text-foreground border-3 border-cobra-red p-3 font-mono text-sm focus:border-cobra-yellow focus:outline-none placeholder:text-foreground/30 mb-4"
             style={{ boxShadow: "inset 2px 2px 0px rgba(0,0,0,0.3)" }}

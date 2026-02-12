@@ -19,6 +19,8 @@ export default function FanFiction() {
   const [showScreenplay, setShowScreenplay] = useState<number | null>(null);
   const [stories, setStories] = useState<Story[]>([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [password, setPassword] = useState("");
+  const [deleting, setDeleting] = useState<number | null>(null);
 
   const fetchStories = useCallback(() => {
     fetch("/api/stories")
@@ -41,6 +43,27 @@ export default function FanFiction() {
   useEffect(() => {
     fetchStories();
   }, [fetchStories]);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Delete this story? No mercy.")) return;
+    setDeleting(id);
+    try {
+      const res = await fetch("/api/stories", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, password }),
+      });
+      if (res.ok) {
+        setExpanded(null);
+        setShowScreenplay(null);
+        fetchStories();
+      }
+    } catch {
+      // silent fail
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   return (
     <section
@@ -137,14 +160,25 @@ export default function FanFiction() {
                         <p className="text-foreground leading-relaxed font-mono text-sm">
                           {story.excerpt}
                         </p>
-                        {story.screenplay && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); setShowScreenplay(i); }}
-                            className="mt-4 font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-red text-cobra-red hover:bg-cobra-red hover:text-white transition-colors"
-                          >
-                            View Screenplay
-                          </button>
-                        )}
+                        <div className="flex items-center gap-3 mt-4">
+                          {story.screenplay && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setShowScreenplay(i); }}
+                              className="font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-red text-cobra-red hover:bg-cobra-red hover:text-white transition-colors"
+                            >
+                              View Screenplay
+                            </button>
+                          )}
+                          {loggedIn && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDelete(story.id); }}
+                              disabled={deleting === story.id}
+                              className="font-mono text-xs uppercase tracking-wider px-4 py-2 border-2 border-cobra-gold/30 text-cobra-gold/30 hover:border-cobra-red hover:text-cobra-red transition-colors disabled:opacity-30"
+                            >
+                              {deleting === story.id ? "Deleting..." : "Delete"}
+                            </button>
+                          )}
+                        </div>
                       </>
                     )}
                   </div>
@@ -154,7 +188,12 @@ export default function FanFiction() {
           </div>
         )}
 
-        <StorySubmitForm loggedIn={loggedIn} onLogin={() => setLoggedIn(true)} onStoryCreated={fetchStories} />
+        <StorySubmitForm
+          loggedIn={loggedIn}
+          onLogin={(pw) => { setLoggedIn(true); setPassword(pw); }}
+          onStoryCreated={fetchStories}
+          password={password}
+        />
       </div>
     </section>
   );

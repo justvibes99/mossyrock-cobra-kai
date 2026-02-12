@@ -75,3 +75,43 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { id, password } = await request.json();
+
+    if (!password || !checkPassword(password)) {
+      return NextResponse.json(
+        { error: "The cobra rejects you." },
+        { status: 401 }
+      );
+    }
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Story ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const sql = getSQL();
+    const rows = await sql`
+      DELETE FROM stories WHERE id = ${id} RETURNING id
+    `;
+
+    if (rows.length === 0) {
+      return NextResponse.json(
+        { error: "Story not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ deleted: true });
+  } catch (error) {
+    console.error("Story delete error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete story" },
+      { status: 500 }
+    );
+  }
+}
