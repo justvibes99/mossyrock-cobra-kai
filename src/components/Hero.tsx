@@ -11,10 +11,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-x-hidden bg-cobra-black px-4">
+    <section className="relative min-h-screen flex flex-col items-center justify-center bg-cobra-black px-4">
       {/* Subtle background pattern only */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.03] overflow-hidden"
         style={{
           backgroundImage:
             "repeating-linear-gradient(45deg, transparent, transparent 20px, #FFE66D 20px, #FFE66D 22px)",
