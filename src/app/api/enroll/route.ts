@@ -14,8 +14,8 @@ export async function POST(request: Request) {
 
     const sql = getSQL();
     await sql`
-      INSERT INTO roster (name, dojo_name, status)
-      VALUES (${name.trim()}, ${dojoName}, 'PENDING')
+      INSERT INTO roster (name, dojo_name, path, status)
+      VALUES (${name.trim()}, ${dojoName}, 'Cobra Kai', 'PENDING')
     `;
 
     return NextResponse.json({ dojo_name: dojoName });
